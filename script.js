@@ -1,9 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════
    Wellbeing Index — behaviour
-   Backend: FastAPI at 127.0.0.1:2200, POST /predict
+   Backend: FastAPI at https://mental-health-score-prediction-1-kqwt.onrender.com, POST /predict
    ═══════════════════════════════════════════════════════════════ */
 
-const API_BASE = 'http://127.0.0.1:2200';
+const API_BASE = 'https://mental-health-score-prediction-1-kqwt.onrender.com';
 
 const $  = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
