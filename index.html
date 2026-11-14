@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mental Health Score Prediction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ambient light -->
+<div class="aurora" aria-hidden="true">
+  <span class="orb orb--violet"></span>
+  <span class="orb orb--mint"></span>
+  <span class="orb orb--coral"></span>
+</div>
+
+<header class="nav">
+  <div class="shell nav__inner">
+    <div class="brand">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 14c2.5 0 2.5-5 5-5s2.5 8 5 8 2.5-7 5-7 2.5 4 3 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="brand__text">Wellbeing&nbsp;Index</span>
+    </div>
+    <span class="nav__status" id="navStatus">
+      <i class="dot"></i><span id="navStatusText">Checking server…</span>
+    </span>
+  </div>
+</header>
+
+<main class="shell">
+
+  <section class="intro">
+    <h1 class="intro__title">Your habits, scored.</h1>
+    <p class="intro__lede">
+      Twelve things about how you sleep, study, move, and use your phone. A
+      random&nbsp;forest turns them into a wellbeing estimate, with the shape of
+      your day laid out beside it.
+    </p>
+  </section>
+
+  <div class="layout">
+
+    <!-- ── Form ───────────────────────────────────────────── -->
+    <form id="scoreForm" class="glass form" novalidate>
+
+      <section class="block">
+        <header class="block__head">
+          <span class="block__num">1</span>
+          <h2 class="block__title">About you</h2>
+        </header>
+        <div class="fields">
+          <div class="field">
+            <label class="lab" for="age">Age</label>
+            <input type="number" id="age" name="age" min="10" max="100" value="21">
+            <p class="err" data-err="age"></p>
+          </div>
+          <div class="field">
+            <label class="lab" for="gender">Gender</label>
+            <div class="sel">
+              <select id="gender" name="gender">
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="lab" for="country">Country</label>
+            <input type="text" id="country" name="country" list="countryList" value="India" placeholder="Type or pick">
+            <datalist id="countryList">
+              <option>India</option><option>USA</option><option>Canada</option>
+              <option>Australia</option><option>UK</option><option>Germany</option>
+              <option>Mexico</option><option>Turkey</option><option>France</option>
+              <option>Nepal</option><option>Other</option>
+            </datalist>
+            <p class="err" data-err="country"></p>
+          </div>
+          <div class="field">
+            <label class="lab" for="academic_level">Academic level</label>
+            <div class="sel">
+              <select id="academic_level" name="academic_level">
+                <option>Undergraduate</option>
+                <option>Graduate</option>
+                <option value="High School">High School</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <header class="block__head">
+          <span class="block__num">2</span>
+          <h2 class="block__title">Your phone</h2>
+        </header>
+        <div class="fields">
+          <div class="field">
+            <label class="lab" for="most_used_platform">Most used platform</label>
+            <div class="sel">
+              <select id="most_used_platform" name="most_used_platform">
+                <option>Instagram</option><option>Facebook</option><option>LinkedIn</option>
+                <option>Snapchat</option><option>Twitter</option><option>YouTube</option>
+                <option>TikTok</option><option>LINE</option><option>KakaoTalk</option>
+                <option>VKontakte</option><option>WhatsApp</option><option>WeChat</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="lab" for="purpose_of_use">Mainly for</label>
+            <div class="sel">
+              <select id="purpose_of_use" name="purpose_of_use">
+                <option>Entertainment</option><option>Networking</option>
+                <option>Education</option><option>News</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field field--full">
+            <div class="lab lab--row">
+              <label for="avg_daily_usage_hours">Time on social media</label>
+              <output class="pill pill--violet" id="out_usage">5.5 h</output>
+            </div>
+            <input type="range" class="rng rng--violet" id="avg_daily_usage_hours"
+                   name="avg_daily_usage_hours" min="0" max="24" step="0.5" value="5.5"
+                   data-seg="screen" data-unit="h">
+          </div>
+
+          <div class="field field--full">
+            <div class="lab lab--row">
+              <label for="daily_unlocks">Phone unlocks</label>
+              <output class="pill pill--slate" id="out_unlocks">90</output>
+            </div>
+            <input type="range" class="rng rng--slate" id="daily_unlocks"
+                   name="daily_unlocks" min="0" max="300" step="5" value="90">
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <header class="block__head">
+          <span class="block__num">3</span>
+          <h2 class="block__title">Your day</h2>
+        </header>
+        <div class="fields">
+          <div class="field field--full">
+            <div class="lab lab--row">
+              <label for="study_hours">Studying</label>
+              <output class="pill pill--mint" id="out_study">3 h</output>
+            </div>
+            <input type="range" class="rng rng--mint" id="study_hours"
+                   name="study_hours" min="0" max="24" step="0.5" value="3"
+                   data-seg="study" data-unit="h">
+          </div>
+
+          <div class="field field--full">
+            <div class="lab lab--row">
+              <label for="physical_activity_hours">Moving or exercising</label>
+              <output class="pill pill--coral" id="out_move">1 h</output>
+            </div>
+            <input type="range" class="rng rng--coral" id="physical_activity_hours"
+                   name="physical_activity_hours" min="0" max="24" step="0.5" value="1"
+                   data-seg="move" data-unit="h">
+          </div>
+
+          <div class="field field--full">
+            <div class="lab lab--row">
+              <label for="sleep_hours_per_night">Sleeping</label>
+              <output class="pill pill--blue" id="out_sleep">6.5 h</output>
+            </div>
+            <input type="range" class="rng rng--blue" id="sleep_hours_per_night"
+                   name="sleep_hours_per_night" min="0" max="24" step="0.5" value="6.5"
+                   data-seg="sleep" data-unit="h">
+          </div>
+
+          <div class="field field--full">
+            <span class="lab">Stress right now</span>
+            <div class="seg" role="radiogroup" aria-label="Stress right now">
+              <label><input type="radio" name="stress_level" value="Low"><span>Low</span></label>
+              <label><input type="radio" name="stress_level" value="Medium" checked><span>Medium</span></label>
+              <label><input type="radio" name="stress_level" value="High"><span>High</span></label>
+              <label><input type="radio" name="stress_level" value="Very High"><span>Very high</span></label>
+            </div>
+            <p class="err" data-err="stress_level"></p>
+          </div>
+        </div>
+      </section>
+
+      <div class="cta">
+        <button type="submit" class="btn" id="submitBtn">
+          <span class="btn__spin" aria-hidden="true"></span>
+          <span class="btn__label">Calculate my score</span>
+        </button>
+        <button type="button" class="btn btn--quiet" id="resetBtn">Reset</button>
+      </div>
+    </form>
+
+    <!-- ── Results ────────────────────────────────────────── -->
+    <div class="results">
+
+      <!-- Score gauge -->
+      <section class="glass card card--score" aria-live="polite">
+        <div class="card__head">
+          <h2 class="card__title">Wellbeing score</h2>
+          <span class="chip" id="scoreChip" hidden>Live</span>
+        </div>
+
+        <div class="gauge">
+          <svg viewBox="0 0 240 178" class="gauge__svg" role="img" aria-label="Wellbeing score gauge">
+            <defs>
+              <linearGradient id="arcGrad" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0%"   stop-color="#FF6B5A"/>
+                <stop offset="42%"  stop-color="#FFB347"/>
+                <stop offset="72%"  stop-color="#4ADE9B"/>
+                <stop offset="100%" stop-color="#00D2A8"/>
+              </linearGradient>
+              <linearGradient id="numGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%"   stop-color="#FFFFFF"/>
+                <stop offset="100%" stop-color="#C9BEFF"/>
+              </linearGradient>
+              <filter id="arcGlow" x="-55%" y="-55%" width="210%" height="210%">
+                <feGaussianBlur stdDeviation="6" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <path class="gauge__track" d="M 32 150 A 88 88 0 0 1 208 150"
+                  fill="none" stroke-width="16" stroke-linecap="round"/>
+            <path class="gauge__fill" id="gaugeFill" d="M 32 150 A 88 88 0 0 1 208 150"
+                  fill="none" stroke="url(#arcGrad)" stroke-width="16"
+                  stroke-linecap="round" filter="url(#arcGlow)"/>
+            <circle class="gauge__knob is-off" id="gaugeKnob" r="6.5" cx="32" cy="150"/>
+
+            <text class="gauge__num" id="scoreValue" x="120" y="122"
+                  text-anchor="middle" fill="url(#numGrad)">&#8212;</text>
+            <text class="gauge__den" id="scoreDen" x="120" y="145"
+                  text-anchor="middle">out of 10</text>
+            <text class="gauge__end" x="30" y="170" text-anchor="middle">1</text>
+            <text class="gauge__end" x="210" y="170" text-anchor="middle">10</text>
+          </svg>
+        </div>
+
+        <div class="verdict" id="verdict" hidden>
+          <p class="verdict__band" id="verdictBand"></p>
+          <p class="verdict__text" id="verdictText"></p>
+        </div>
+
+        <p class="card__idle" id="scoreIdle">
+          Set your day on the left, then calculate. The charts below update as
+          you move the sliders.
+        </p>
+
+        <div class="alert" id="alertBox" hidden>
+          <p class="alert__title" id="alertTitle"></p>
+          <p class="alert__body" id="alertBody"></p>
+          <ul class="alert__list" id="alertList" hidden></ul>
+        </div>
+      </section>
+
+      <!-- Radar -->
+      <section class="glass card">
+        <div class="card__head">
+          <h2 class="card__title">Balance profile</h2>
+          <span class="card__sub">From your inputs</span>
+        </div>
+
+        <div class="radar">
+          <svg viewBox="0 0 300 268" class="radar__svg" role="img" aria-label="Balance profile across five habits">
+            <defs>
+              <linearGradient id="radarGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%"   stop-color="#8B7CFF" stop-opacity=".55"/>
+                <stop offset="100%" stop-color="#00D2A8" stop-opacity=".30"/>
+              </linearGradient>
+            </defs>
+            <g id="radarGrid"></g>
+            <polygon id="radarShape" fill="url(#radarGrad)" stroke="#9D8CFF" stroke-width="2" stroke-linejoin="round"/>
+            <g id="radarDots"></g>
+            <g id="radarLabels"></g>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Day split -->
+      <section class="glass card">
+        <div class="card__head">
+          <h2 class="card__title">Where the 24 hours go</h2>
+          <span class="card__sub" id="splitTotal">24 h accounted</span>
+        </div>
+
+        <div class="split" id="splitBar">
+          <span class="split__seg" data-seg="screen"></span>
+          <span class="split__seg" data-seg="study"></span>
+          <span class="split__seg" data-seg="move"></span>
+          <span class="split__seg" data-seg="sleep"></span>
+          <span class="split__seg" data-seg="rest"></span>
+        </div>
+
+        <ul class="legend">
+          <li><i style="background:#8B7CFF"></i>Screen<b data-key="screen">0</b></li>
+          <li><i style="background:#00D2A8"></i>Study<b data-key="study">0</b></li>
+          <li><i style="background:#FF8A65"></i>Movement<b data-key="move">0</b></li>
+          <li><i style="background:#4D7CFE"></i>Sleep<b data-key="sleep">0</b></li>
+          <li><i style="background:rgba(255,255,255,.16)"></i>Unspent<b data-key="rest">0</b></li>
+        </ul>
+
+        <p class="split__warn" id="splitWarn" hidden></p>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <p>Estimates come from a model trained on self-reported student survey data. Not a clinical assessment — if something feels wrong, speak to a doctor, counsellor, or someone you trust.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
